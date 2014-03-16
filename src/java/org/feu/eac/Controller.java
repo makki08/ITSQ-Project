@@ -102,7 +102,6 @@ public class Controller extends HttpServlet {
                     language = "English";
                 }
                 
-                
                 List<ErrorMessage> errorMessages = checkGrammar.getErrors(input, language);
                 
                 /* FOR TESTING!!!!!!!!!!!!
