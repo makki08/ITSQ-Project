@@ -4,6 +4,9 @@
     Author     : makki
 --%>
 
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page import="org.feu.eac.dto.ErrorMessage"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,7 +14,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Bootstrap 101 Template</title>
+        <title>Result</title>
 
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -48,7 +51,19 @@
         </div>
         <div class="container">
             <div class="starter-template">
-                <h3>Language detected as: <%=session.getAttribute("language")%></h3>
+                <h4>Language: <%=session.getAttribute("language")%></h4></br>
+                <h4>Potential Errors List</h4>
+                <% List<ErrorMessage> errorMessages = (ArrayList)session.getAttribute("errorMessages");
+                   
+                for (ErrorMessage errorMessage : errorMessages) {
+                %>Line Number: <%=errorMessage.getLine_no() %> </br> 
+                Column Number: <%=errorMessage.getColumn_no() %> </br>
+                Description: <%=errorMessage.getDescription() %> </br>
+                Suggestion: <%=errorMessage.getSuggestion() %> </br>
+                </br>
+                <%
+                }
+                %>
             </div>
         </div><!-- /.container -->
 

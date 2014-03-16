@@ -3,18 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.feu.eac;
 
 import com.cybozu.labs.langdetect.LangDetectException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.feu.eac.dto.ErrorMessage;
+import org.languagetool.JLanguageTool;
+import org.languagetool.language.AmericanEnglish;
+import org.languagetool.language.BritishEnglish;
+import org.languagetool.language.English;
+import org.languagetool.rules.RuleMatch;
 
 /**
  *
@@ -40,7 +46,7 @@ public class Controller extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Controller</title>");            
+            out.println("<title>Servlet Controller</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet Controller at " + request.getContextPath() + "</h1>");
@@ -80,25 +86,45 @@ public class Controller extends HttpServlet {
         //processRequest(request, response);
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-        
+
         if (request.getParameter("submit") != null && request.getParameter("submit").equals("Submit")) {
             String input = request.getParameter("textarea");
             try {
                 String lang = langDetect.detect(input);
-                //out.println(input);
+                String language = "";
+                CheckGrammar checkGrammar = new CheckGrammar();
+                
                 if (lang.equals("tl")) {
                     request.getSession().setAttribute("language", "Filipino");
+                    language = "Tagalog";
                 } else if (lang.equals("en")) {
                     request.getSession().setAttribute("language", "English");
+                    language = "English";
                 }
+                
+                
+                List<ErrorMessage> errorMessages = checkGrammar.getErrors(input, language);
+                
+                /* FOR TESTING!!!!!!!!!!!!
+                for (ErrorMessage message : errorMessages) {
+                    out.println(message.getLine_no() + "</br>");
+                    out.println(message.getColumn_no() + "</br>");
+                    out.println(message.getDescription()+ "</br>");
+                    out.println(message.getSuggestion() + "</br>");
+                    out.println("</br>");
+                } */
+                
+                request.getSession().setAttribute("errorMessages", errorMessages);
                 response.sendRedirect("result.jsp");
+                
             } catch (LangDetectException ex) {
-                Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+                //Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+                response.sendRedirect("error.jsp");
             }
-         }
-        
+        }
+
     }
-    
+
     @Override
     public void init() throws ServletException {
         try {
@@ -107,6 +133,7 @@ public class Controller extends HttpServlet {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     /**
      * Returns a short description of the servlet.
      *
