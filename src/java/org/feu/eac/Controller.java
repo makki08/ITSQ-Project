@@ -113,6 +113,9 @@ public class Controller extends HttpServlet {
                     out.println("</br>");
                 } */
                 
+                CheckContent checkContent = new CheckContent(input);
+                request.getSession().setAttribute("contentScore", checkContent.getContentScore());
+                
                 request.getSession().setAttribute("errorMessages", errorMessages);
                 response.sendRedirect("result.jsp");
                 

@@ -51,8 +51,10 @@
         </div>
         <div class="container">
             <div class="starter-template">
-                <h4>Language: <%=session.getAttribute("language")%></h4></br>
-                <h4>Potential Errors List</h4>
+                <h3>Language: <%=session.getAttribute("language")%></h3></br>
+                <h2>Content Score: <%=session.getAttribute("contentScore")%></br> </h2>
+                
+                <h2>Potential Errors List</h2>
                 <% List<ErrorMessage> errorMessages = (ArrayList)session.getAttribute("errorMessages");
                    
                 for (ErrorMessage errorMessage : errorMessages) {
@@ -64,6 +66,7 @@
                 <%
                 }
                 %>
+                 
             </div>
         </div><!-- /.container -->
 

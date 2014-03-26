@@ -43,7 +43,11 @@
                         <li><a href="#about">About</a></li>
                         <li><a href="#contact">Contact</a></li>
                     </ul>
+                    <form method="post" action="train" class="navbar-form navbar-right" role="form">
+                        <button type="submit" name="train" value="Train the System" class="btn btn-success">Train the System</button>
+                    </form>
                 </div><!--/.nav-collapse -->
+                
             </div>
         </div>
 
