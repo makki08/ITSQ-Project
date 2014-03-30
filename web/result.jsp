@@ -4,9 +4,11 @@
     Author     : makki
 --%>
 
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="org.feu.eac.dto.ErrorMessage"%>
+<%@page import="org.feu.eac.dto.Scoring"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -52,7 +54,10 @@
         <div class="container">
             <div class="starter-template">
                 <h3>Language: <%=session.getAttribute("language")%></h3></br>
-                <h2>Content Score: <%=session.getAttribute("contentScore")%></br> </h2>
+                <% Scoring scoring = (Scoring)session.getAttribute("scoring"); %>
+                <h2>Content Score: <%=scoring.getContentScore() %></br> </h2>
+                <h2>Grammar Score: <%=scoring.getGrammarScore()%></br> </h2>
+                <h2>Overall Score: <%=new DecimalFormat().format(scoring.getOverallScore())%></br> </h2>
                 
                 <h2>Potential Errors List</h2>
                 <% List<ErrorMessage> errorMessages = (ArrayList)session.getAttribute("errorMessages");

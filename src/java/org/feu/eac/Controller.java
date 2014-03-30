@@ -16,11 +16,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.feu.eac.dto.ErrorMessage;
+import org.feu.eac.dto.Scoring;
 import org.languagetool.JLanguageTool;
 import org.languagetool.language.AmericanEnglish;
 import org.languagetool.language.BritishEnglish;
 import org.languagetool.language.English;
 import org.languagetool.rules.RuleMatch;
+import org.tartarus.snowball.SnowballProgram;
 
 /**
  *
@@ -113,10 +115,19 @@ public class Controller extends HttpServlet {
                     out.println("</br>");
                 } */
                 
-                CheckContent checkContent = new CheckContent(input);
-                request.getSession().setAttribute("contentScore", checkContent.getContentScore());
+                Stemmer stemmer = new Stemmer(input);
+                String stemmed = stemmer.getStem();
+                
+                CheckContent checkContent = new CheckContent(stemmed);
+                int length = checkContent.getContentScore().length();
+                String score = checkContent.getContentScore().substring(length - 6, length - 4);
+                request.getSession().setAttribute("contentScore", score);
+                
+                Scoring scoring = new Scoring(Double.parseDouble(score), errorMessages.size());
+                double overallScore = scoring.getOverallScore();
                 
                 request.getSession().setAttribute("errorMessages", errorMessages);
+                request.getSession().setAttribute("scoring", scoring);
                 response.sendRedirect("result.jsp");
                 
             } catch (LangDetectException ex) {

@@ -26,7 +26,7 @@ public class CheckContent {
         strlist.add("termvectors.bin");
         strlist.add("-searchvectorfile");
         strlist.add("docvectors.bin");
-        st = input.trim().split("\\s");
+        st = input.toLowerCase().trim().split("\\s");
         for (String s : st) {
             if (s.equalsIgnoreCase("not")) {
                 continue;
@@ -43,6 +43,7 @@ public class CheckContent {
         String contentScore = "";
         for (SearchResult result : results) {
             contentScore = result.getObjectVector().getObject().toString();
+            break;
 //            System.out.println(String.format(
 //                    "%f:%s",
 //                    result.getScore(),
