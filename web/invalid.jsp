@@ -58,16 +58,8 @@
         </div>
 
         <div class="container">
-
-            <div class="starter-template" >
-                <h3>Type or paste your text submission here...</h3>
-                <form role="form" action="controller" method="post">
-                     <div class="form-group">
-                          <label class="control-label" for="textarea"></label>
-                          <textarea class="form-control" id="textarea" name="textarea" rows="18"></textarea></br>
-                          <button type="submit" class="btn btn-primary" name="submit" value="Submit">Submit</button>
-                     </div>
-                </form>
+            <div class="starter-template">
+                <h3>Invalid username and/or password</h3>
             </div>
         </div><!-- /.container -->
 

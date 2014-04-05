@@ -58,7 +58,7 @@
                 <h2>Content Score: <%=scoring.getContentScore() %></br> </h2>
                 <h2>Grammar Score: <%=scoring.getGrammarScore()%></br> </h2>
                 <h2>Overall Score: <%=new DecimalFormat().format(scoring.getOverallScore())%></br> </h2>
-                
+                </br>
                 <h2>Potential Errors List</h2>
                 <% List<ErrorMessage> errorMessages = (ArrayList)session.getAttribute("errorMessages");
                    

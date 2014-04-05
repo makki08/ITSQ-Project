@@ -4,6 +4,8 @@
     Author     : makki
 --%>
 
+<%@page import="org.feu.eac.dto.Properties"%>
+<%@page import="java.io.File"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -26,6 +28,10 @@
         <![endif]-->
     </head>
     <body>
+        <% if (request.getSession().getAttribute("admin") == null) {
+                response.sendRedirect("index.jsp");
+            } else {
+        %>
         <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
             <div class="container">
                 <div class="navbar-header">
@@ -43,34 +49,51 @@
                         <li><a href="#about">About</a></li>
                         <li><a href="#contact">Contact</a></li>
                     </ul>
-                    <form method="post" action="admin" class="navbar-form navbar-right" role="form" >
-                        <div class="form-group">
-                            <input type="text"  name="username" placeholder="Username" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <input type="password" name="password"  placeholder="Password" class="form-control">
-                        </div>
-                        <button type="submit" class="btn btn-success" name="admin" value="admin">Sign in</button>
-                    </form>
                 </div><!--/.nav-collapse -->
-                
+
             </div>
         </div>
 
         <div class="container">
+            <div class="starter-template">
+                <h3>Administrator's Module</h3>
+                <% Properties props = (Properties) session.getAttribute("props");
+                %>
+                </br>
+                </br>
+                <table class="table col-sm-6 table-striped table-bordered" >
+                    <thead >
+                        <tr>
+                            <th class="col-sm-2">
+                                <div class="text-center">Category</div>
+                            </th>
+                            <th class="col-sm-1">
+                                <div class="text-center">Value</div>
+                            </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Current topic</td>
+                            <td><%=props.getTopic()%></td>
+                        </tr>
+                        <tr>
+                            <td>Size of the corpus</td>
+                            <td><%=props.getFilesInCorpus()%></td>
+                        </tr>
+                        <tr>
+                            <td>Number of submitted essays</td>
+                            <td><%=props.getNumberOfSubmittesEssays()%></td>
+                        </tr>
+                    </tbody>
 
-            <div class="starter-template" >
-                <h3>Type or paste your text submission here...</h3>
-                <form role="form" action="controller" method="post">
-                     <div class="form-group">
-                          <label class="control-label" for="textarea"></label>
-                          <textarea class="form-control" id="textarea" name="textarea" rows="18"></textarea></br>
-                          <button type="submit" class="btn btn-primary" name="submit" value="Submit">Submit</button>
-                     </div>
-                </form>
+                </table>
+
             </div>
         </div><!-- /.container -->
-
+        <%
+            }
+        %>
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
