@@ -21,9 +21,11 @@ import org.languagetool.rules.RuleMatch;
  */
 public class CheckGrammar {
     JLanguageTool langTool;
+    private int count;
 
     public CheckGrammar() throws IOException {
-        langTool = new JLanguageTool(new AmericanEnglish());
+        this.langTool = new JLanguageTool(new AmericanEnglish());
+        this.count = 0;
     }
        
     
@@ -48,7 +50,14 @@ public class CheckGrammar {
             errorMessages.add(errorMessage);
         }
         
+        langTool.check(input);
+        count = langTool.getSentenceCount();
+        
         return errorMessages;
+    }
+
+    public int getCount() {
+        return count;
     }
     
 }

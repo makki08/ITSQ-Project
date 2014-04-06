@@ -87,7 +87,7 @@ public class Train extends HttpServlet {
             VectorStoreTranslater.main(new String[] {"-lucenetotext", "termvectors.bin","termvectorsCheck.txt"});
             VectorStoreTranslater.main(new String[] {"-lucenetotext", "docvectors.bin","docvectorsCheck.txt"});
             
-            response.sendRedirect("trainingResult.jsp");
+            response.sendRedirect("train.jsp");
         }
     }
 

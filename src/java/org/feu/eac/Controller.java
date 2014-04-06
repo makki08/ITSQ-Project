@@ -8,6 +8,8 @@ package org.feu.eac;
 import com.cybozu.labs.langdetect.LangDetectException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -91,10 +93,14 @@ public class Controller extends HttpServlet {
 
         if (request.getParameter("submit") != null && request.getParameter("submit").equals("Submit")) {
             String input = request.getParameter("textarea");
+            int studentNum = Integer.parseInt(request.getParameter("s_number"));
+            String name = request.getParameter("s_name");
+            String year = request.getParameter("s_year");
+            String section = request.getParameter("s_section");
+            
             try {
                 String lang = langDetect.detect(input);
                 String language = "";
-                CheckGrammar checkGrammar = new CheckGrammar();
                 
                 if (lang.equals("tl")) {
                     request.getSession().setAttribute("language", "Filipino");
@@ -104,7 +110,9 @@ public class Controller extends HttpServlet {
                     language = "English";
                 }
                 
+                CheckGrammar checkGrammar = new CheckGrammar();
                 List<ErrorMessage> errorMessages = checkGrammar.getErrors(input, language);
+                int sentenceCount = checkGrammar.getCount();
                 
                 /* FOR TESTING!!!!!!!!!!!!
                 for (ErrorMessage message : errorMessages) {
@@ -123,9 +131,15 @@ public class Controller extends HttpServlet {
                 String score = checkContent.getContentScore().substring(length - 6, length - 4);
                 request.getSession().setAttribute("contentScore", score);
                 
-                Scoring scoring = new Scoring(Double.parseDouble(score), errorMessages.size());
+                Scoring scoring = new Scoring(Double.parseDouble(score), errorMessages.size(), sentenceCount);
                 double overallScore = scoring.getOverallScore();
+                double contentScore = scoring.getContentScore();
+                double grammarScore = scoring.getGrammarScore();
                 
+                
+                WriteToDB write = new WriteToDB();
+                
+                write.addToSubmissions(studentNum, name, year, section, input, overallScore, contentScore, grammarScore);
                 request.getSession().setAttribute("errorMessages", errorMessages);
                 request.getSession().setAttribute("scoring", scoring);
                 response.sendRedirect("result.jsp");

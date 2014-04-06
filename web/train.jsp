@@ -11,7 +11,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Online Grammar Checker</title>
+        <title>Automated Essay Evaluator</title>
 
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -39,24 +39,58 @@
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="index.jsp">Home</a></li>
+                        <li><a href="index.jsp">Home</a></li>
+                        <li class="active"><a href="train.jsp">Train the System</a>
                         <li><a href="#about">About</a></li>
                         <li><a href="#contact">Contact</a></li>
                     </ul>
-                    <form method="post" action="train" class="navbar-form navbar-right" role="form">
-                        <button type="submit" name="train" value="Train the System" class="btn btn-success">Train the System</button>
-                    </form>
                 </div><!--/.nav-collapse -->
-                
+
             </div>
         </div>
 
-        <div class="container">
-
+        <div class="container col-lg-12">
             <div class="starter-template">
-                <h3>Training Successful..</h3>
+                <h3> Add pre-graded essays to corpus </h3>
+                </br>
+                </br>
+                <form role="form" action="upload" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-lg-3">
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="col-lg-5">
+                                <input type="file" name="file" />
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="col-lg-6">
+                                    <p class="text-center">Grade: </p>
+                                </div>
+                                <div class="col-lg-6">
+                                    <input class="form-control" type="text" name="grade" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <button class="btn btn-primary" type="submit" name="addfile" value="Add">Add</button>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                        </div>
+                    </div>
+                </form>
                 
             </div>
+            <div class="col-lg-12 text-center">
+                <%
+                    if (!(session.getAttribute("message2") == null)) {
+
+                %>
+                <%=session.getAttribute("message2")%>
+                <%  session.removeAttribute("message2");
+                    }
+                %>
+            </div>
+            
         </div><!-- /.container -->
 
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

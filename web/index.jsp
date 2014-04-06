@@ -11,7 +11,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Online Grammar Checker</title>
+        <title>Automated Essay Evaluator</title>
 
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -56,20 +56,49 @@
                 
             </div>
         </div>
-
+        <!--
         <div class="container">
-
             <div class="starter-template" >
-                <h3>Type or paste your text submission here...</h3>
+                <h3>Automated Essay Evaluator</h3>
                 <form role="form" action="controller" method="post">
                      <div class="form-group">
-                          <label class="control-label" for="textarea"></label>
-                          <textarea class="form-control" id="textarea" name="textarea" rows="18"></textarea></br>
-                          <button type="submit" class="btn btn-primary" name="submit" value="Submit">Submit</button>
+                         <label class="control-label" for="textarea"></label>
+                         <textarea class="form-control" id="textarea" name="textarea" rows="18" placeholder="Type or paste your text submission here..."></textarea></br>
+                         <button type="submit" class="btn btn-primary" name="submit" value="Submit">Submit</button>
                      </div>
                 </form>
             </div>
         </div><!-- /.container -->
+        
+        <div class="starter-template">
+            <h3>Automated Essay Evaluator</h3>
+            <form role="form" action="controller" method="post">
+            <div class="form-group">
+                 <div class="container col-lg-5">
+                     </br>
+                     <h4>Topic: Choosing a Career</h4> 
+                     </br>
+                     </br>
+                     <p class="text-left">Student Number: </p><input type="text"  name="s_number" class="form-control">
+                     </br>
+                     <p class="text-left">Name: </p><input type="text"  name="s_name" class="form-control">
+                     </br>
+                     <p class="text-left">Year: </p><input type="text"  name="s_year" class="form-control">
+                     </br>
+                     <p class="text-left">Section: </p><input type="text"  name="s_section" class="form-control">
+                 </div>
+                <div class="container col-lg-7">
+                    <label class="control-label" for="textarea"></label>
+                    <textarea class="form-control" id="textarea" name="textarea" rows="18" placeholder="Type or paste your text submission here..."></textarea>
+                </div>
+                <div class="text-center">
+                    <p>&nbsp</p>
+                    <button type="submit" class="btn btn-primary" name="submit" value="Submit">Submit</button>
+                </div>
+            </div>
+        </form>
+        </div>
+        
 
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>

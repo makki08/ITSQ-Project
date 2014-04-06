@@ -15,12 +15,17 @@ public class Scoring {
     private static double grammarWeight = 30.0;
     private double contentScore;
     private double grammarScore;
+    private int correctSentences;
     
-    public Scoring(double contentScore, int grammarScore) {
+    public Scoring(double contentScore, int errors, int sentenceCount) {
         this.contentScore = contentScore;
-        this.grammarScore = (100 - grammarScore);
-        if (this.grammarScore < 70) {
+        this.correctSentences = sentenceCount - errors;
+        if (errors > sentenceCount) {
             this.grammarScore = 70;
+        } else if ((((double)correctSentences/(double)sentenceCount) * 100) < 50) {
+            this.grammarScore = 70;
+        } else {
+            this.grammarScore = ((double)correctSentences/(double)sentenceCount) * 100;
         }
     }
 
@@ -65,5 +70,4 @@ public class Scoring {
         
         return overallScore;
     }
-    
 }
