@@ -6,21 +6,22 @@
 
 package org.feu.eac;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.lucene.demo.IndexFiles;
-import pitt.search.semanticvectors.LSA;
-import pitt.search.semanticvectors.VectorStoreTranslater;
+import org.apache.commons.io.FileUtils;
 
 /**
  *
  * @author makki
  */
-public class Train extends HttpServlet {
+@WebServlet(name = "NewTopic", urlPatterns = {"/newTopic"})
+public class NewTopic extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +40,10 @@ public class Train extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet train</title>");            
+            out.println("<title>Servlet NewTopic</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet train at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet NewTopic at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -75,22 +76,20 @@ public class Train extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //processRequest(request, response);
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
         
-        if (request.getParameter("train") != null && request.getParameter("train").equals("Train the System")) {
-            String[] indexString = {"-docs", "C:\\Users\\makki\\Documents\\NetBeansProjects\\ITSQ-Project\\corpus", "-index", "C:\\Users\\makki\\Documents\\NetBeansProjects\\ITSQ-Project\\index"};
-            IndexFiles.main(indexString);
-            String[] lsaString = {"-termweight", "idf", "-minfrequency", "1", "-maxfrequency", "20", "-luceneindexpath", "C:\\Users\\makki\\Documents\\NetBeansProjects\\ITSQ-Project\\index"};
-            LSA.main(lsaString);
+        if (request.getParameter("newTopic") != null && request.getParameter("newTopic").equals("newTopic")) {
+            String topic = request.getParameter("topic");
+            WriteToDB write = new WriteToDB();
+            write.createNewTopic(topic);
             
-            VectorStoreTranslater.main(new String[] {"-lucenetotext", "termvectors.bin","termvectorsCheck.txt"});
-            VectorStoreTranslater.main(new String[] {"-lucenetotext", "docvectors.bin","docvectorsCheck.txt"});
+            File directory = new File("C:/Users/makki/Documents/NetBeansProjects/ITSQ-Project/corpus");
+            FileUtils.cleanDirectory(directory);
             
-            request.getSession().setAttribute("message3", "Training successful.");
+            request.getSession().setAttribute("newTopic", "New essay topic created. Please add new pre-graded essays to the corpus and re-train the system.");
             
             response.sendRedirect("train.jsp");
         }
+        
     }
 
     /**

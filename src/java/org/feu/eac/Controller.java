@@ -131,7 +131,10 @@ public class Controller extends HttpServlet {
                 String score = checkContent.getContentScore().substring(length - 6, length - 4);
                 request.getSession().setAttribute("contentScore", score);
                 
-                Scoring scoring = new Scoring(Double.parseDouble(score), errorMessages.size(), sentenceCount);
+                Scoring scoring = new Scoring();
+                scoring.setContentScore(Double.parseDouble(score));
+                scoring.setGrammarScore(errorMessages.size(), sentenceCount);
+                
                 double overallScore = scoring.getOverallScore();
                 double contentScore = scoring.getContentScore();
                 double grammarScore = scoring.getGrammarScore();

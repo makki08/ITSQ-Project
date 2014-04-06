@@ -18,7 +18,7 @@ public class Stemmer {
     String[] str;
     
     public Stemmer(String input) {
-        str = input.trim().toLowerCase().split("\\s");
+        str = input.trim().replaceAll("[^a-zA-Z ]", " ").toLowerCase().split("\\s+");
 //        for (String s : str) {
 //            strlist.add(s);
 //        }

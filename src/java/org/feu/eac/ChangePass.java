@@ -8,19 +8,21 @@ package org.feu.eac;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.lucene.demo.IndexFiles;
-import pitt.search.semanticvectors.LSA;
-import pitt.search.semanticvectors.VectorStoreTranslater;
+import org.feu.eac.dto.ReadFromDB;
 
 /**
  *
  * @author makki
  */
-public class Train extends HttpServlet {
+@WebServlet(name = "ChangePass", urlPatterns = {"/changePass"})
+public class ChangePass extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +41,10 @@ public class Train extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet train</title>");            
+            out.println("<title>Servlet ChangePass</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet train at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ChangePass at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -75,22 +77,28 @@ public class Train extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //processRequest(request, response);
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
         
-        if (request.getParameter("train") != null && request.getParameter("train").equals("Train the System")) {
-            String[] indexString = {"-docs", "C:\\Users\\makki\\Documents\\NetBeansProjects\\ITSQ-Project\\corpus", "-index", "C:\\Users\\makki\\Documents\\NetBeansProjects\\ITSQ-Project\\index"};
-            IndexFiles.main(indexString);
-            String[] lsaString = {"-termweight", "idf", "-minfrequency", "1", "-maxfrequency", "20", "-luceneindexpath", "C:\\Users\\makki\\Documents\\NetBeansProjects\\ITSQ-Project\\index"};
-            LSA.main(lsaString);
-            
-            VectorStoreTranslater.main(new String[] {"-lucenetotext", "termvectors.bin","termvectorsCheck.txt"});
-            VectorStoreTranslater.main(new String[] {"-lucenetotext", "docvectors.bin","docvectorsCheck.txt"});
-            
-            request.getSession().setAttribute("message3", "Training successful.");
-            
-            response.sendRedirect("train.jsp");
-        }
+         if (request.getParameter("change") != null && request.getParameter("change").equals("Change")) {
+             try {
+                 String oldPass = request.getParameter("oldPass");
+                 String newPass = request.getParameter("password");
+                 
+                 ReadFromDB readFromDB = new ReadFromDB();
+                 boolean valid = readFromDB.checkPass(oldPass);
+                 if (valid) {
+                     WriteToDB writeToDB = new WriteToDB();
+                     writeToDB.changePass(newPass);
+                     
+                     request.getSession().setAttribute("success", "Password changed successfully.");
+                     //response.sendRedirect("admin.jsp");
+                 }
+                 
+             } catch (Exception ex) {
+                 Logger.getLogger(ChangePass.class.getName()).log(Level.SEVERE, null, ex);
+                 request.getSession().setAttribute("success", "Failed to change password.");
+             }
+             response.sendRedirect("admin.jsp");
+         }
     }
 
     /**

@@ -109,24 +109,25 @@ public class Upload extends HttpServlet {
                         while ((line = bufferedReader.readLine()) != null) {
                             // do your processing 
                             try {
-                                writer.append(line);
-                                //writer.flush();
+                                Stemmer stemmer = new Stemmer(line);
+                                String stemmed = stemmer.getStem();
+                                writer.append(stemmed);
+                                writer.flush();
                                 
                             } catch (IOException e) {
                                 out.println(e.getMessage());
                             }
-                                
-                            //out.println(line);
+                        //out.println(line);
                         }
                         writer.close();
                         //multiparts.get(i).write(new File(UPLOAD_DIRECTORY + File.separator + fname));
                     }
                 }
                 //File uploaded successfully
-                request.getSession().setAttribute("message2", "File Uploaded Successfully");
+                request.getSession().setAttribute("message2", "File uploaded successfully.");
                 //request.setAttribute("message", "File Uploaded Successfully");
             } catch (Exception ex) {
-                request.getSession().setAttribute("message2", "File Upload Failed due to " + ex);
+                request.getSession().setAttribute("message2", "File upload failed due to " + ex);
                 //request.setAttribute("message", "File Upload Failed due to " + ex);
             }
                

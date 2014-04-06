@@ -9,18 +9,18 @@ package org.feu.eac;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.lucene.demo.IndexFiles;
-import pitt.search.semanticvectors.LSA;
-import pitt.search.semanticvectors.VectorStoreTranslater;
+import org.feu.eac.dto.Scoring;
 
 /**
  *
  * @author makki
  */
-public class Train extends HttpServlet {
+@WebServlet(name = "Grading", urlPatterns = {"/grading"})
+public class Grading extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +39,10 @@ public class Train extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet train</title>");            
+            out.println("<title>Servlet Grading</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet train at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet Grading at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -75,21 +75,26 @@ public class Train extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //processRequest(request, response);
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
         
-        if (request.getParameter("train") != null && request.getParameter("train").equals("Train the System")) {
-            String[] indexString = {"-docs", "C:\\Users\\makki\\Documents\\NetBeansProjects\\ITSQ-Project\\corpus", "-index", "C:\\Users\\makki\\Documents\\NetBeansProjects\\ITSQ-Project\\index"};
-            IndexFiles.main(indexString);
-            String[] lsaString = {"-termweight", "idf", "-minfrequency", "1", "-maxfrequency", "20", "-luceneindexpath", "C:\\Users\\makki\\Documents\\NetBeansProjects\\ITSQ-Project\\index"};
-            LSA.main(lsaString);
+        if (request.getParameter("modify") != null && 
+                request.getParameter("modify").equals("Modify")) {
+            try {
+                double content = Double.parseDouble(request.getParameter("content"));
+                double grammar = Double.parseDouble(request.getParameter("grammar"));
+                
+                if (content + grammar != 100.0 ) {
+                    request.getSession().setAttribute("message4", "Total should be 100.");
+                } else {
+                    Scoring.setCONTENTWEIGHT(content);
+                    Scoring.setGRAMMARWEIGHT(grammar);
+                    request.getSession().setAttribute("message4", "Changes saved sucessfully.");
+                }
+                
+            } catch (NumberFormatException e) {
+                request.getSession().setAttribute("message4", "Please enter a valid input.");
+            } 
             
-            VectorStoreTranslater.main(new String[] {"-lucenetotext", "termvectors.bin","termvectorsCheck.txt"});
-            VectorStoreTranslater.main(new String[] {"-lucenetotext", "docvectors.bin","docvectorsCheck.txt"});
-            
-            request.getSession().setAttribute("message3", "Training successful.");
-            
-            response.sendRedirect("train.jsp");
+            response.sendRedirect("grading.jsp");
         }
     }
 

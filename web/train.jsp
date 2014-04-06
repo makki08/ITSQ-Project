@@ -26,6 +26,10 @@
         <![endif]-->
     </head>
     <body>
+        <% if (request.getSession().getAttribute("admin") == null) {
+                response.sendRedirect("index.jsp");
+            } else {
+        %>
         <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
             <div class="container">
                 <div class="navbar-header">
@@ -39,8 +43,10 @@
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
-                        <li><a href="index.jsp">Home</a></li>
+                        <li><a href="admin.jsp">Admin Home</a></li>
                         <li class="active"><a href="train.jsp">Train the System</a>
+                        <li><a href="grading.jsp">Change Grading Scheme</a>
+                        <li class="active"><a class="button right" href="viewEssays">View Submissions</a></li>
                         <li><a href="#about">About</a></li>
                         <li><a href="#contact">Contact</a></li>
                     </ul>
@@ -67,11 +73,11 @@
                                     <p class="text-center">Grade: </p>
                                 </div>
                                 <div class="col-lg-6">
-                                    <input class="form-control" type="text" name="grade" />
+                                    <input class="form-control" type="number" name="grade" required/>
                                 </div>
                             </div>
                             <div class="col-lg-3">
-                                <button class="btn btn-primary" type="submit" name="addfile" value="Add">Add</button>
+                                <button class="btn btn-primary" type="submit" name="addfile" value="Add">Add to Corpus</button>
                             </div>
                         </div>
                         <div class="col-lg-3">
@@ -90,8 +96,63 @@
                     }
                 %>
             </div>
-            
+            <div class="col-lg-12 text-center">
+                </br>
+                <form role="form" action="train" method="post">
+                    <button class="btn btn-success" type="submit" name="train" value="Train the System">Train the System</button>
+                </form>
+            </div>
+            <div class="col-lg-12 text-center">
+                <%
+                    if (!(session.getAttribute("message3") == null)) {
+
+                %>
+                </br>
+                <%=session.getAttribute("message3")%>
+                <%  session.removeAttribute("message3");
+                    }
+                %>
+            </div>
+            </br>
+            &nbsp
+            <div class="col-lg-12 text-center">
+                <h3>Create a new essay topic</h3>
+                &nbsp;
+                <p>Note: Creating a new topic will delete the contents of the current corpus and all essays submitted.</p>
+                <form role="form" action="newTopic" method="post">
+                <div class="col-lg-3">   
+                </div>
+                <div class="col-lg-6">
+                    <div class="col-lg-3">
+                        <p class="text-right">New Topic :</p>
+                    </div>
+                    <div class="col-lg-9">
+                        <input type="text" class="form-control" name="topic" required>
+                    </div>
+                </div>
+                <div class="col-lg-3">   
+                </div>
+                <div class="col-lg-12">
+                    </br>
+                    <button class="btn btn-success" type="submit" name="newTopic" value="newTopic" >Create New Topic</button>
+                </div>
+                </form>
+            </div>
+            <div class="col-lg-12 text-center">
+                <%
+                    if (!(session.getAttribute("newTopic") == null)) {
+
+                %>
+                </br>
+                <%=session.getAttribute("newTopic")%>
+                <%  session.removeAttribute("newTopic");
+                    }
+                %>
+            </div>
         </div><!-- /.container -->
+        <%
+            }
+        %>
 
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>

@@ -45,6 +45,7 @@
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
                         <li class="active"><a href="index.jsp">Home</a></li>
+                        <li class="active"><a class="button right" href="viewEssays">View Submissions</a></li>
                         <li><a href="#about">About</a></li>
                         <li><a href="#contact">Contact</a></li>
                     </ul>
@@ -54,10 +55,11 @@
         <div class="container">
             <div class="starter-template">
                 <h3>Language: <%=session.getAttribute("language")%></h3></br>
-                <% Scoring scoring = (Scoring)session.getAttribute("scoring"); %>
-                <h2>Content Score: <%=scoring.getContentScore() %></br> </h2>
-                <h2>Grammar Score: <%=scoring.getGrammarScore()%></br> </h2>
-                <h2>Overall Score: <%=new DecimalFormat().format(scoring.getOverallScore())%></br> </h2>
+                <% Scoring scoring = (Scoring)session.getAttribute("scoring"); 
+                DecimalFormat df = new DecimalFormat("#.##");%>
+                <h2>Content Score: <%=df.format(scoring.getContentScore()) %></br> </h2>
+                <h2>Grammar Score: <%=df.format(scoring.getGrammarScore())%></br> </h2>
+                <h2>Overall Score: <%=df.format(scoring.getOverallScore())%></br> </h2>
                 </br>
                 <h2>Potential Errors List</h2>
                 <% List<ErrorMessage> errorMessages = (ArrayList)session.getAttribute("errorMessages");

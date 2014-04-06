@@ -1,5 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
+ * To change this license header, choose License Headers in Project Summary.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -16,7 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.feu.eac.dto.Properties;
+import org.feu.eac.dto.Summary;
 import org.feu.eac.dto.ReadFromDB;
 
 /**
@@ -81,19 +81,18 @@ public class Admin extends HttpServlet {
         //processRequest(request, response);\
         PrintWriter out = response.getWriter();
         response.setContentType("text/html;charset=UTF-8");
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
+        
         boolean valid;
         
         if (request.getParameter("admin") != null && request.getParameter("admin").equals("admin")) {
+            String username = request.getParameter("username");
+            String password = request.getParameter("password");
             try {
                 ReadFromDB read = new ReadFromDB();
                 valid = read.connect(username, password);
                 
                 if (valid) {
-                    Properties props = read.getProps();
                     request.getSession().setAttribute("admin", "Administrator's Module");
-                    request.getSession().setAttribute("props", props);
                     response.sendRedirect("admin.jsp");
                 } else {
                     request.getSession().setAttribute("errorMessage", "Invalid Username/Password");
@@ -104,11 +103,7 @@ public class Admin extends HttpServlet {
                 Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
                 out.println("Errrrrror");
             }
-            
-            
         }
-        
-        
     }
 
     /**

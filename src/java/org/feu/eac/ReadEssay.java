@@ -8,19 +8,22 @@ package org.feu.eac;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.lucene.demo.IndexFiles;
-import pitt.search.semanticvectors.LSA;
-import pitt.search.semanticvectors.VectorStoreTranslater;
+import org.feu.eac.dto.ReadFromDB;
 
 /**
  *
  * @author makki
  */
-public class Train extends HttpServlet {
+@WebServlet(name = "ReadEssay", urlPatterns = {"/readEssay"})
+public class ReadEssay extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +42,10 @@ public class Train extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet train</title>");            
+            out.println("<title>Servlet ReadEssay</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet train at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ReadEssay at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -75,22 +78,21 @@ public class Train extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //processRequest(request, response);
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        
-        if (request.getParameter("train") != null && request.getParameter("train").equals("Train the System")) {
-            String[] indexString = {"-docs", "C:\\Users\\makki\\Documents\\NetBeansProjects\\ITSQ-Project\\corpus", "-index", "C:\\Users\\makki\\Documents\\NetBeansProjects\\ITSQ-Project\\index"};
-            IndexFiles.main(indexString);
-            String[] lsaString = {"-termweight", "idf", "-minfrequency", "1", "-maxfrequency", "20", "-luceneindexpath", "C:\\Users\\makki\\Documents\\NetBeansProjects\\ITSQ-Project\\index"};
-            LSA.main(lsaString);
+        if (request.getParameter("read") != null && request.getParameter("read").equals("Read")) {
+            try {
+                int choice = Integer.parseInt(request.getParameter("choice"));
+                ReadFromDB readFromDB = new ReadFromDB();
+                String content = readFromDB.getEssayContent(choice);
+                
+                request.getSession().setAttribute("content", content);
+                response.sendRedirect("viewEssays.jsp");
+                //request.getRequestDispatcher("viewEssays.jsp").forward(request, response);
+            } catch (Exception ex) {
+                Logger.getLogger(ReadEssay.class.getName()).log(Level.SEVERE, null, ex);
+            }
             
-            VectorStoreTranslater.main(new String[] {"-lucenetotext", "termvectors.bin","termvectorsCheck.txt"});
-            VectorStoreTranslater.main(new String[] {"-lucenetotext", "docvectors.bin","docvectorsCheck.txt"});
-            
-            request.getSession().setAttribute("message3", "Training successful.");
-            
-            response.sendRedirect("train.jsp");
         }
+        
     }
 
     /**

@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  *
@@ -26,6 +27,7 @@ public class WriteToDB {
 
     private Connection connect = null;
     private PreparedStatement preparedStatement = null;
+    private PreparedStatement preparedStatement2 = null;
 
     public void addToSubmissions (int student_num, String student_name, String student_year, 
             String student_section, String content, double overall_score, double content_score, 
@@ -74,4 +76,79 @@ public class WriteToDB {
             }
         }
     }
+    
+    public void createNewTopic (String topic) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            connect = DriverManager.getConnection(DB_URL, USER, PASS);
+            
+            String sql = "UPDATE properties SET topic = ?, corpus_size = 0, submissions = 0 WHERE topic_id = 1;";
+            preparedStatement = connect.prepareStatement(sql);
+            preparedStatement.setString(1, topic);
+
+            // Execute SQL insert
+            preparedStatement.executeUpdate();
+            
+            String sql2 = "DELETE FROM submissions;";
+            preparedStatement2 = connect.prepareStatement(sql2);
+            preparedStatement2.executeUpdate(); 
+            
+        } catch (SQLException se) {
+            System.out.println(se.getMessage());
+        } catch (Exception e) {
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(WriteToDB.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (connect != null) {
+                try {
+                    connect.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(WriteToDB.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }
+    
+   public void changePass (String password) {
+       try {
+            Class.forName("com.mysql.jdbc.Driver");
+            connect = DriverManager.getConnection(DB_URL, USER, PASS);
+            
+            String sql = "UPDATE test.users SET password = ? WHERE username = ?;";
+            preparedStatement = connect.prepareStatement(sql);
+            preparedStatement.setString(1, DigestUtils.md5Hex(password));
+            preparedStatement.setString(2, "admin");
+            
+            // Execute SQL insert
+            preparedStatement.executeUpdate();
+            
+        } catch (SQLException se) {
+            System.out.println(se.getMessage());
+        } catch (Exception e) {
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(WriteToDB.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (connect != null) {
+                try {
+                    connect.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(WriteToDB.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+   }
 }

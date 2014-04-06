@@ -11,14 +11,47 @@ package org.feu.eac.dto;
  * @author makki
  */
 public class Scoring {
-    private static double contentWeight = 70.0 ;
-    private static double grammarWeight = 30.0;
+    private static double CONTENTWEIGHT = 70.0;
+    private static double GRAMMARWEIGHT = 30.0;
     private double contentScore;
     private double grammarScore;
     private int correctSentences;
     
-    public Scoring(double contentScore, int errors, int sentenceCount) {
+    public Scoring() {
+        contentScore = 0.0;
+        grammarScore = 0.0;
+        correctSentences = 0;
+    }
+
+    public static double getCONTENTWEIGHT() {
+        return CONTENTWEIGHT;
+    }
+
+    public static void setCONTENTWEIGHT(double contentWeight) {
+        Scoring.CONTENTWEIGHT = contentWeight;
+    }
+
+    public static double getGRAMMARWEIGHT() {
+        return GRAMMARWEIGHT;
+    }
+
+    public static void setGRAMMARWEIGHT(double GRAMMARWEIGHT) {
+        Scoring.GRAMMARWEIGHT = GRAMMARWEIGHT;
+    }
+
+    public double getContentScore() {
+        return contentScore;
+    }
+
+    public void setContentScore(double contentScore) {
         this.contentScore = contentScore;
+    }
+
+    public double getGrammarScore() {
+        return grammarScore;
+    }
+
+    public void setGrammarScore(int errors, int sentenceCount) {
         this.correctSentences = sentenceCount - errors;
         if (errors > sentenceCount) {
             this.grammarScore = 70;
@@ -28,43 +61,11 @@ public class Scoring {
             this.grammarScore = ((double)correctSentences/(double)sentenceCount) * 100;
         }
     }
-
-    public static double getContentWeight() {
-        return contentWeight;
-    }
-
-    public static void setContentWeight(float contentWeight) {
-        Scoring.contentWeight = contentWeight;
-    }
-
-    public static double getGrammarWeight() {
-        return grammarWeight;
-    }
-
-    public static void setGrammarWeight(float grammarWeight) {
-        Scoring.grammarWeight = grammarWeight;
-    }
-
-    public double getContentScore() {
-        return contentScore;
-    }
-
-    public void setContentScore(float contentScore) {
-        this.contentScore = contentScore;
-    }
-
-    public double getGrammarScore() {
-        return grammarScore;
-    }
-
-    public void setGrammarScore(float grammarScore) {
-        this.grammarScore = grammarScore;
-    }
     
     public double getOverallScore () {
         double overallScore = 0.0;
-        double contentPart = contentScore * (contentWeight/100);
-        double grammarPart = grammarScore * (grammarWeight/100);
+        double contentPart = contentScore * (CONTENTWEIGHT/100);
+        double grammarPart = grammarScore * (GRAMMARWEIGHT/100);
         
         overallScore = contentPart + grammarPart;
         
